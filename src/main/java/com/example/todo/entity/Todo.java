@@ -40,6 +40,7 @@ public class Todo {
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
+    private LocalDateTime startDate;
     private LocalDateTime deadline;
     private LocalDateTime createdDate;
     private LocalDateTime completedDate;

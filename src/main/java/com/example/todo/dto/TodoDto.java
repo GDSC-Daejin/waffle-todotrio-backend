@@ -28,6 +28,8 @@ public class TodoDto {
     @Schema(description = "우선순위", example = "HIGH")
     private Priority priority;          // 우선순위 (HIGH, MEDIUM, LOW)
 
+    @Schema(description = "시작기한", example = "2026-03-01T12:00:00")
+    private LocalDateTime startDate;
     @Schema(description = "마감기한", example = "2026-02-01T12:00:00")
     private LocalDateTime deadline;     // 마감기한
     @Schema(description = "상태", example = "IN_PROGRESS")
@@ -46,6 +48,7 @@ public class TodoDto {
                 todo.getTitle(),
                 todo.getContent(),
                 todo.getPriority(),
+                todo.getStartDate(),
                 todo.getDeadline(),
                 todo.getStatus(),
                 todo.getCreatedDate(),
