@@ -24,6 +24,9 @@ public class TodoRequestDto {
     @Schema(description = "우선순위", example = "HIGH")
     private Priority priority;
 
+    @Schema(description = "시작기한", example = "2024-04-01T12:00:00")
+    private LocalDateTime startDate;
+
     @Schema(description = "마감기한", example = "2024-02-01T12:00:00")
     private LocalDateTime deadline;
 }

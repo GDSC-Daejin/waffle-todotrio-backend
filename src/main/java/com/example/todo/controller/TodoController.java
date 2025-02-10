@@ -76,6 +76,8 @@ public class TodoController {
         return userService.getUserByUsername(userDetails.getUsername());
     }
 
+
+
     @GetMapping("/statistics")
     @Operation(summary = "Todo 통계 조회")
     public ResponseDto<TodoStatisticsDto> getStatistics(@AuthenticationPrincipal UserDetails userDetails) {
