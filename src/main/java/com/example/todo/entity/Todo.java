@@ -44,6 +44,7 @@ public class Todo {
     private LocalDateTime deadline;
     private LocalDateTime createdDate;
     private LocalDateTime completedDate;
+    private String category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User owner;
