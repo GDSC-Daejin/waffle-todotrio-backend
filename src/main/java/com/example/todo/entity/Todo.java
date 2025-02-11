@@ -40,10 +40,18 @@ public class Todo {
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime startDate;
+
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime deadline;
+
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime createdDate;
+
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime completedDate;
+
     private String category;
 
     @ManyToOne(fetch = FetchType.LAZY)

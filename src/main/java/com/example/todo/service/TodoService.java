@@ -17,6 +17,7 @@
     import org.springframework.stereotype.Service;
 
     import java.time.LocalDateTime;
+    import java.time.ZoneId;
     import java.util.List;
     import java.util.stream.Collectors;
 
@@ -37,13 +38,19 @@
         @Transactional
         public Todo createTodo(TodoRequestDto requestDto, User user) {
             Todo todo = new Todo();
+
+            ZoneId seoulZone = ZoneId.of("Asia/Seoul");
+            LocalDateTime now = LocalDateTime.now(seoulZone);
+
             todo.setTitle(requestDto.getTitle());
             todo.setContent(requestDto.getContent());
             todo.setPriority(requestDto.getPriority());
-            todo.setStartDate(requestDto.getStartDate());
-            todo.setDeadline(requestDto.getDeadline());
+            todo.setStartDate(requestDto.getStartDate().atZone(ZoneId.systemDefault())
+                    .withZoneSameInstant(seoulZone).toLocalDateTime());
+            todo.setDeadline(requestDto.getDeadline().atZone(ZoneId.systemDefault())
+                    .withZoneSameInstant(seoulZone).toLocalDateTime());
             todo.setStatus(TodoStatus.IN_PROGRESS);
-            todo.setCreatedDate(LocalDateTime.now());
+            todo.setCreatedDate(now);
             todo.setOwner(user);
 
 
@@ -66,21 +73,24 @@
          */
         @Transactional
         public Todo updateTodo(Long todoId, TodoRequestDto requestDto, User user) {
+
+            ZoneId seoulZone = ZoneId.of("Asia/Seoul");
             Todo todo = todoRepository.findById(todoId)
                     .orElseThrow(() -> new RuntimeException("Todo not found"));
 
             todo.setTitle(requestDto.getTitle());
             todo.setContent(requestDto.getContent());
             todo.setPriority(requestDto.getPriority());
-            todo.setStartDate(requestDto.getStartDate());
-            todo.setDeadline(requestDto.getDeadline());
+            todo.setStartDate(requestDto.getStartDate().atZone(ZoneId.systemDefault())
+                    .withZoneSameInstant(seoulZone).toLocalDateTime());
+            todo.setDeadline(requestDto.getDeadline().atZone(ZoneId.systemDefault())
+                    .withZoneSameInstant(seoulZone).toLocalDateTime());
 
             String predictedCategory = mlService.predictCategory(
                     requestDto.getContent(),
                     requestDto.getTitle()
             );
             todo.setCategory(predictedCategory);
-
             return todo;
         }
 
@@ -114,11 +124,12 @@
          */
         @Transactional
         public Todo completeTodo(Long todoId, User user) {
+            ZoneId seoulZone = ZoneId.of("Asia/Seoul");
             Todo todo = todoRepository.findById(todoId)
                     .orElseThrow(() -> new RuntimeException("Todo not found"));
 
             todo.setStatus(TodoStatus.COMPLETED);
-            todo.setCompletedDate(LocalDateTime.now());
+            todo.setCompletedDate(LocalDateTime.now(seoulZone));
 
             recordHistory(todo, user, ActionType.COMPLETE);
             return todo;
@@ -131,14 +142,14 @@
          * @param actionType 이력 유형
          */
         private void recordHistory(Todo todo, User user, ActionType actionType) {
+            ZoneId seoulZone = ZoneId.of("Asia/Seoul");
             TodoHistory history = new TodoHistory();
             history.setTodo(todo);
             history.setUser(user);
             history.setActionType(actionType);
-            history.setCreatedDate(LocalDateTime.now());
+            history.setCreatedDate(LocalDateTime.now(seoulZone));
             historyRepository.save(history);
         }
-
         @Transactional
         public List<Todo> getTodosByUser(User user) {
             return todoRepository.findByOwner(user);
