@@ -26,6 +26,8 @@
         private final TodoRepository todoRepository;
         private final TodoHistoryRepository historyRepository;
 
+        private final MLService mlService; // 머신러닝 관련 서비스 추가
+
         /**
          * 새로운 Todo 생성
          * @param //todoDto Todo 생성 정보
@@ -43,6 +45,14 @@
             todo.setStatus(TodoStatus.IN_PROGRESS);
             todo.setCreatedDate(LocalDateTime.now());
             todo.setOwner(user);
+
+
+            // ML 서버에서 카테고리 예측
+            String predictedCategory = mlService.predictCategory(
+                    requestDto.getContent(),
+                    requestDto.getTitle()
+            );
+            todo.setCategory(predictedCategory);
 
             return todoRepository.save(todo);
         }
@@ -64,6 +74,12 @@
             todo.setPriority(requestDto.getPriority());
             todo.setStartDate(requestDto.getStartDate());
             todo.setDeadline(requestDto.getDeadline());
+
+            String predictedCategory = mlService.predictCategory(
+                    requestDto.getContent(),
+                    requestDto.getTitle()
+            );
+            todo.setCategory(predictedCategory);
 
             return todo;
         }
@@ -193,6 +209,12 @@
             todo.setContent(requestDto.getContent());
             todo.setPriority(requestDto.getPriority());
             todo.setDeadline(requestDto.getDeadline());
+
+            String predictedCategory = mlService.predictCategory(
+                    requestDto.getContent(),
+                    requestDto.getTitle()
+            );
+            todo.setCategory(predictedCategory);
 
             return todoRepository.save(todo);
         }

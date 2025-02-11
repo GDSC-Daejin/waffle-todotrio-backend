@@ -29,4 +29,7 @@ public class TodoRequestDto {
 
     @Schema(description = "마감기한", example = "2024-02-01T12:00:00")
     private LocalDateTime deadline;
+
+    @Schema(description = "ML 이 카테고리 넣는곳", example = "아무 카테고리")
+    private String category;
 }

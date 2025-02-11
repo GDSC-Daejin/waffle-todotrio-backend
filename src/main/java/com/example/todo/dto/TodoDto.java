@@ -36,6 +36,7 @@ public class TodoDto {
     private TodoStatus status;          // 상태 (IN_PROGRESS, COMPLETED, DELAYED)
     private LocalDateTime createdDate;  // 생성일시
     private LocalDateTime completedDate; // 완료일시
+    private String category; // 카테고리
 
     /**
      * Todo 엔티티를 DTO로 변환
@@ -52,7 +53,9 @@ public class TodoDto {
                 todo.getDeadline(),
                 todo.getStatus(),
                 todo.getCreatedDate(),
-                todo.getCompletedDate()
+                todo.getCompletedDate(),
+                todo.getCategory()
+
         );
     }
 }
