@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class MLService {
     private final RestTemplate restTemplate;
-    private static final String ML_SERVER_URL = "http://localhost:5000/predict"; // ML 서버 주소
+    private static final String ML_SERVER_URL = "https://ca40-112-152-82-7.ngrok-free.app"; // ML 서버 주소
 
     public String predictCategory(String content, String title) {
         try {
