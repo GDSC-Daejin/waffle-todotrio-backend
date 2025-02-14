@@ -51,11 +51,11 @@ public class MLService {
         }
     }
 
-    public Double predictSuccess(Todo todo) {
+    public String predictSuccess(Todo todo) {
         try {
             if (todo == null || todo.getDeadline() == null) {
                 log.warn("유효하지 않은 Todo 데이터");
-                return 0.0;
+                return "0%";
             }
             PredictSuccessRequestDto request = new PredictSuccessRequestDto();
             request.setPriority(todo.getPriority().toString());
@@ -76,16 +76,13 @@ public class MLService {
                 String jsonFixed = rawResponse.getBody().replace('\'', '"');
                 ObjectMapper mapper = new ObjectMapper();
                 PredictSuccessResponseDto responseDto = mapper.readValue(jsonFixed, PredictSuccessResponseDto.class);
-
-                // 백분율 문자열("87%")을 Double로 변환
-                String probString = responseDto.getProbability().toString().replace("%", "");
-                return Double.parseDouble(probString) / 100.0;
+                return responseDto.getProbability().toString();
             }
 
-            return 0.0;
+            return "0%";
         } catch (Exception e) {
             log.error("성공 확률 예측 중 오류 발생: {}", e.getMessage());
-            return 0.0;
+            return "0%";
         }
     }
 
