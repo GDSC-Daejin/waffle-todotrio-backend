@@ -131,8 +131,48 @@
             todo.setStatus(TodoStatus.COMPLETED);
             todo.setCompletedDate(LocalDateTime.now(seoulZone));
 
+            mlService.trainModel(todo);
+
             recordHistory(todo, user, ActionType.COMPLETE);
             return todo;
+        }
+
+        /**
+         * Todo 지연 처리
+         * @param todoId 지연 처리할 Todo ID
+         * @param user 처리자
+         * @return 지연 처리된 Todo
+         */
+        @Transactional
+        public Todo delayTodo(Long todoId, User user) {
+            ZoneId seoulZone = ZoneId.of("Asia/Seoul");
+            Todo todo = todoRepository.findById(todoId)
+                    .orElseThrow(() -> new RuntimeException("Todo not found"));
+
+            // 이미 완료된 할일인 경우 예외 처리
+            if (todo.getStatus() == TodoStatus.COMPLETED) {
+                throw new IllegalStateException("이미 완료된 할일은 지연 처리할 수 없습니다.");
+            }
+
+            todo.setStatus(TodoStatus.DELAYED);
+
+            // 마감기한 연장 (1주일)
+            if (todo.getDeadline() != null) {
+                todo.setDeadline(todo.getDeadline().plusWeeks(1));
+            }
+            // 지연 처리 시 ML 서버에 학습 데이터 전송
+            mlService.trainModel(todo);
+            // 이력 기록
+            recordHistory(todo, user, ActionType.DELAYED);
+            return todo;
+        }
+        // ml 확률 통신
+        @Transactional
+        public Double getPredictedSuccess(Long todoId) {
+            Todo todo = todoRepository.findById(todoId)
+                    .orElseThrow(() -> new RuntimeException("Todo not found"));
+
+            return mlService.predictSuccess(todo);
         }
 
         /**

@@ -9,11 +9,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -75,7 +77,23 @@ public class TodoController {
     private User getUser(UserDetails userDetails) {
         return userService.getUserByUsername(userDetails.getUsername());
     }
+    // 지연 처리
+    @PutMapping("/{todoId}/delay")
+    @Operation(summary = "할일 지연 처리")
+    public ResponseDto<TodoDto> delayTodo(
+            @PathVariable Long todoId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseDto.success(TodoDto.from(
+                todoService.delayTodo(todoId, getUser(userDetails))));
+    }
 
+    @GetMapping("/{todoId}/success-probability")
+    public ResponseEntity<Map<String, Double>> getPredictedSuccess(
+            @PathVariable Long todoId,
+            @AuthenticationPrincipal User user) {
+        Double probability = todoService.getPredictedSuccess(todoId);
+        return ResponseEntity.ok(Map.of("probability", probability));
+    }
 
 
     @GetMapping("/statistics")
