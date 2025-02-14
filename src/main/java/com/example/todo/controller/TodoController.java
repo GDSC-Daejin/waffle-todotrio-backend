@@ -88,10 +88,10 @@ public class TodoController {
     }
 
     @GetMapping("/{todoId}/success-probability")
-    public ResponseEntity<Map<String, Double>> getPredictedSuccess(
+    public ResponseEntity<Map<String, String>> getPredictedSuccess(
             @PathVariable Long todoId,
             @AuthenticationPrincipal User user) {
-        Double probability = todoService.getPredictedSuccess(todoId);
+        String probability = todoService.getPredictedSuccess(todoId);
         return ResponseEntity.ok(Map.of("probability", probability));
     }
 
