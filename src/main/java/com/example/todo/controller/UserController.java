@@ -18,18 +18,19 @@ public class UserController {
 
     @GetMapping("/info")
     @Operation(summary = "회원 정보 보여주기")
-    public ResponseDto<String> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseDto.success("Hello " + userDetails.getUsername());
+    public ResponseDto<UserDto> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
+        UserDto userDto = userService.getUserInfo(userDetails.getUsername());
+        return ResponseDto.success(userDto);
     }
 
     @Operation(summary = "회원 정보 수정")
     @PutMapping("/update")
-    public ResponseDto<String> updateUser(
+    public ResponseDto<UserDto> updateUser(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody UserDto userDto) {
         try {
-            userService.updateUser(userDetails.getUsername(), userDto);
-            return ResponseDto.success("회원정보 수정 성공");
+            UserDto updatedUser = userService.updateUser(userDetails.getUsername(), userDto);
+            return ResponseDto.success(updatedUser);
         } catch (RuntimeException e) {
             return ResponseDto.fail(e.getMessage());
         }

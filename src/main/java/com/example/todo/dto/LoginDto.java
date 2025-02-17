@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Schema(description = "로그인 요청 DTO")
 public class LoginDto {
-    @Schema(description = "사용자명", example = "user123")
+    @Schema(description = "사용자명", example = "user124")
     private String username;
 
     @Schema(description = "비밀번호", example = "password123")

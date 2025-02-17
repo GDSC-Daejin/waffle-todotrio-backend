@@ -168,7 +168,7 @@
         }
         // ml 확률 통신
         @Transactional
-        public String getPredictedSuccess(Long todoId) {
+        public String getPredictedSuccess(Long todoId, User User) {
             Todo todo = todoRepository.findById(todoId)
                     .orElseThrow(() -> new RuntimeException("Todo not found"));
 
