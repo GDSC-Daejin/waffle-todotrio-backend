@@ -14,4 +14,6 @@ public class UserDto {
 
     @Schema(description = "이메일", example = "user@example.com")
     private String email;
+
+
 }

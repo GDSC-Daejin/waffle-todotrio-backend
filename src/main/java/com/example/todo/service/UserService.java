@@ -52,15 +52,40 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(String username, UserDto userDto) {
-        // 사용자명으로 사용자 검색
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public UserDto updateUser(String currentUsername, UserDto userDto) {
+        // 현재 사용자 검색
+        User user = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다"));
 
-        user.setEmail(userDto.getEmail());
-        if (userDto.getPassword() != null) {
+        // 새로운 username으로 변경하려는 경우
+        if (userDto.getUsername() != null && !userDto.getUsername().equals(currentUsername)) {
+            // 새로운 username이 이미 존재하는지 확인
+            if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
+                throw new RuntimeException("이미 존재하는 사용자명입니다");
+            }
+            user.setUsername(userDto.getUsername());
+        }
+
+        // 이메일 업데이트
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+
+        // 비밀번호 업데이트
+        if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
+
+        // 변경된 사용자 저장
+        userRepository.save(user);
+
+        // 업데이트된 사용자 정보를 DTO로 변환
+        UserDto updatedUserDto = new UserDto();
+        updatedUserDto.setUsername(user.getUsername()); // 변경된 username
+        updatedUserDto.setEmail(user.getEmail());
+        updatedUserDto.setPassword(null); // 보안을 위해 비밀번호는 null로 설정
+
+        return updatedUserDto;
     }
 
     public String login(LoginDto loginDto) {
@@ -115,6 +140,15 @@ public class UserService {
 
     public void deleteUserById(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public UserDto getUserInfo(String username) {
+        User user = getUserByUsername(username);
+        UserDto userDto = new UserDto();
+        userDto.setUsername(user.getUsername());
+        userDto.setEmail(user.getEmail());
+        // 비밀번호는 보안상의 이유로 제외
+        return userDto;
     }
 
 }
