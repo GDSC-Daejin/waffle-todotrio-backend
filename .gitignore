@@ -5,10 +5,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### Properties files ###
-src/main/resources/application.properties
-src/main/resources/application-*.properties
-!src/main/resources/application.properties.example
 
 ### STS ###
 .apt_generated
