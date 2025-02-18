@@ -87,6 +87,17 @@ public class TodoController {
                 todoService.delayTodo(todoId, getUser(userDetails))));
     }
 
+    @PutMapping("/{todoId}/restart")
+    @Operation(summary = "할일 재시작 처리", description = "지연 또는 완료된 할일을 진행중 상태로 변경합니다")
+    public ResponseDto<TodoDto> restartTodo(
+            @PathVariable Long todoId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        User user = getUser(userDetails);
+        Todo updatedTodo = todoService.restartTodo(todoId, user);
+        return ResponseDto.success(TodoDto.from(updatedTodo));
+    }
+
+
     @GetMapping("/{todoId}/success-probability")
     @Operation(summary = "성공률 계산")
     public ResponseDto<String> getPredictedSuccess(

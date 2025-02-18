@@ -175,6 +175,24 @@
             return mlService.predictSuccess(todo);
         }
 
+        @Transactional
+        public Todo restartTodo(Long todoId, User user) {
+            Todo todo = todoRepository.findById(todoId)
+                    .orElseThrow(() -> new IllegalArgumentException("Todo not found"));
+
+            if (todo.getStatus() != TodoStatus.DELAYED && todo.getStatus() != TodoStatus.COMPLETED) {
+                throw new IllegalStateException("Todo는 지연 또는 완료 상태에서만 재시작할 수 있습니다.");
+            }
+
+            todo.setStatus(TodoStatus.IN_PROGRESS);
+
+
+            recordHistory(todo, user, ActionType.UPDATE);
+
+            return todoRepository.save(todo);
+        }
+
+
         /**
          * Todo 이력 기록
          * @param todo 대상 Todo
