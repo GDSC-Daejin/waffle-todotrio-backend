@@ -27,10 +27,7 @@ public class MLService {
     public String predictCategory(String content, String title) {
         try {
             // 요청 데이터 준비
-            MLRequestDto request = new MLRequestDto();
-            request.setContent(content);
-            request.setTitle(title);
-
+            MLRequestDto request = new MLRequestDto(content, title);
             // ML 서버로 요청 보내기
             ResponseEntity<MLResponseDto> response = restTemplate.postForEntity(
                     ML_SERVER_URL,
@@ -57,12 +54,13 @@ public class MLService {
                 log.warn("유효하지 않은 Todo 데이터");
                 return "0%";
             }
-            PredictSuccessRequestDto request = new PredictSuccessRequestDto();
-            request.setPriority(todo.getPriority().toString());
-            request.setCreatedDate(todo.getCreatedDate().toString());
-            request.setDeadline(todo.getDeadline().toString());
-            request.setCategory(todo.getCategory());
-            request.setStatus(null);
+            PredictSuccessRequestDto request = new PredictSuccessRequestDto(
+                    todo.getPriority().toString(),
+                    todo.getCreatedDate().toString(),
+                    todo.getDeadline().toString(),
+                    todo.getCategory(),
+                    null
+            );
 
             log.info("ML 서버 요청 데이터: {}", request);
 
@@ -89,12 +87,15 @@ public class MLService {
 
     public TrainModelResponseDto trainModel(Todo todo) {
         try {
-            TrainModelRequestDto request = new TrainModelRequestDto();
-            request.setPriority(todo.getPriority().toString());
-            request.setCreatedDate(todo.getCreatedDate().toString());
-            request.setDeadline(todo.getDeadline().toString());
-            request.setCategory(todo.getCategory());
-            request.setStatus(null);
+            TrainModelRequestDto request = new TrainModelRequestDto(
+
+            todo.getPriority().toString(),
+            todo.getCreatedDate().toString(),
+            todo.getDeadline().toString(),
+            todo.getCategory(),
+            null
+            );
+
 
             log.info("학습 요청 데이터: {}", request);
 
