@@ -73,5 +73,13 @@ public class TodoShareController {
         return ResponseDto.success("권한이 수정되었습니다");
     }
 
+    @GetMapping("/{todoId}/sharer")
+    @Operation(summary = "Todo를 공유해준 사용자 조회")
+    public ResponseDto<String> getSharerUsername(
+            @PathVariable Long todoId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        String sharerUsername = shareService.getSharerUsername(todoId, userDetails.getUsername());
+        return ResponseDto.success(sharerUsername);
+    }
 
 }

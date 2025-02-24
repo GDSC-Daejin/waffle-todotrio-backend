@@ -9,6 +9,7 @@ import com.example.todo.repository.TodoShareRepository;
 import com.example.todo.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.web.embedded.EmbeddedWebServerFactoryCustomizerAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -82,6 +83,26 @@ public class TodoShareService {
                 .orElseThrow(() -> new RuntimeException("Share not found"));
 
         share.setPermissionType(newPermission);
+    }
+
+
+    /**
+     * 공유해준 사람의 유저네임 조회
+     * @param todoId 공유된 Todo ID
+     * @param username 공유받은 사용자 이름
+     * @return 공유해준 사람의 유저네임
+     */
+    @Transactional
+    public String getSharerUsername(Long todoId, String username) {
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new RuntimeException("Todo not found"));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        TodoShare share = shareRepository.findByTodoAndUser(todo, user)
+                .orElseThrow(() -> new RuntimeException("Share not found"));
+
+        return todo.getOwner().getUsername(); // owner를 사용하도록 수정
     }
 
 }
