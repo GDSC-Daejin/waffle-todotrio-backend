@@ -30,6 +30,10 @@ public class TodoShareService {
      */
     @Transactional
     public void shareTodo(Long todoId, String username, PermissionType permission) {
+        if (permission == null) {
+            permission = PermissionType.READ; // 기본값을 READ로 설정
+        }
+
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new RuntimeException("Todo not found"));
 
