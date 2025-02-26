@@ -19,7 +19,7 @@ import java.util.Map;
 public class MLService {
     private final RestTemplate restTemplate;
 
-    private static final String BASE_URL = "https://96e0-175-192-105-233.ngrok-free.app";
+    private static final String BASE_URL = "https://c6e4-112-152-82-7.ngrok-free.app";
     private static final String ML_SERVER_URL = BASE_URL + "/category";
     private static final String SUCCESS_PROB_API_URL = BASE_URL + "/prob";
     private static final String TRAIN_API_URL = BASE_URL + "/train";

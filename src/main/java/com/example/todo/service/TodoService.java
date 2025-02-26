@@ -11,6 +11,7 @@
     import com.example.todo.enums.TodoStatus;
     import com.example.todo.repository.TodoHistoryRepository;
     import com.example.todo.repository.TodoRepository;
+    import com.example.todo.repository.TodoShareRepository;
     import com.example.todo.repository.UserRepository;
     import jakarta.transaction.Transactional;
     import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@
     public class TodoService {
         private final TodoRepository todoRepository;
         private final TodoHistoryRepository historyRepository;
+        private final TodoShareRepository shareRepository;
 
         private final MLService mlService; // 머신러닝 관련 서비스 추가
 
@@ -109,6 +111,8 @@
                 throw new RuntimeException("삭제 권한이 없습니다.");
             }
 
+            // TodoShare 관련 레코드 먼저 삭제
+            shareRepository.deleteByTodo(todo);
             // TodoHistory 먼저 삭제
             historyRepository.deleteByTodo(todo);
 
