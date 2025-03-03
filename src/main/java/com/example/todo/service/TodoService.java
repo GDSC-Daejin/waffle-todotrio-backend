@@ -260,9 +260,9 @@
                     .filter(todo -> searchDto.getPriority() == null ||
                             todo.getPriority() == searchDto.getPriority())
                     .filter(todo -> searchDto.getStartDate() == null ||
-                            todo.getDeadline().isAfter(searchDto.getStartDate()))
+                            (todo.getDeadline() != null && todo.getDeadline().isAfter(searchDto.getStartDate())))
                     .filter(todo -> searchDto.getEndDate() == null ||
-                            todo.getDeadline().isBefore(searchDto.getEndDate()))
+                            (todo.getDeadline() != null && todo.getDeadline().isBefore(searchDto.getEndDate())))
                     .map(TodoDto::from)
                     .collect(Collectors.toList());
         }
