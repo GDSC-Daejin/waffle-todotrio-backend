@@ -59,6 +59,7 @@ public class TodoShareService {
                 .collect(Collectors.toList());
     }
 
+    // Todo 공유 취소
     @Transactional
     public void cancelShare(Long todoId, String username) {
         Todo todo = todoRepository.findById(todoId)
@@ -99,10 +100,13 @@ public class TodoShareService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // 공유해준 사람의 유저네임 조회
         TodoShare share = shareRepository.findByTodoAndUser(todo, user)
                 .orElseThrow(() -> new RuntimeException("Share not found"));
 
         return todo.getOwner().getUsername(); // owner를 사용하도록 수정
     }
+
+
 
 }
