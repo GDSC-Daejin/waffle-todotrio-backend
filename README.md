@@ -2,7 +2,18 @@
 와플-투두트리오
 
 Spring Boot 기반의 Todo 애플리케이션 백엔드 서버
+# 👥 Team Members
 
+---
+
+## 🎨 FrontEnd  
+👩‍💻 **Lucia**  
+
+## 🖥️ BackEnd  
+🧑‍💻 **Malone**  
+
+## 🤖 Machine Learning  
+🧠 **Noah**  
 
 주요기능
 
