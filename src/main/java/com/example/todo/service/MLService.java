@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 public class MLService {
     private final RestTemplate restTemplate;
 
-    private static final String BASE_URL = "https://1c52-112-152-82-7.ngrok-free.app";
+    private static final String BASE_URL = "https://daf3-220-68-154-6.ngrok-free.app";
     private static final String ML_SERVER_URL = BASE_URL + "/category";
     private static final String SUCCESS_PROB_API_URL = BASE_URL + "/prob";
     private static final String TRAIN_API_URL = BASE_URL + "/train";
